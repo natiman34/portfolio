@@ -19,16 +19,18 @@ const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Create mailto link with form data
-    const mailtoLink = `mailto:natim0570@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    )}`;
-    
-    window.location.href = mailtoLink;
-    
+    // Netlify Forms will handle the submission automatically
     toast({
-      title: "Message Prepared",
-      description: "Your default email client should open with the message ready to send.",
+      title: "Message Sent!",
+      description: "Thank you for your message. I'll get back to you soon.",
+    });
+
+    // Reset form after submission
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      message: ''
     });
   };
 
@@ -165,7 +167,13 @@ const Contact = () => {
             </CardHeader>
             
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form 
+                name="contact" 
+                method="POST" 
+                data-netlify="true"
+                onSubmit={handleSubmit} 
+                className="space-y-6"
+              >
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
