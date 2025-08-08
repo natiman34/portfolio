@@ -8,7 +8,7 @@ const Portfolio = () => {
     title: "Final Year Web Application Project",
     role: "Project Manager & Developer",
     description: "Led a team to plan, build, and deploy a full-stack web application using Agile methodologies. Managed the entire development lifecycle from conception to deployment, ensuring efficient collaboration and timely delivery.",
-    technologies: ["React", "Node.js", "MongoDB", "Agile", "Git"],
+    technologies: ["React", "Node.js", "Supabase"],
     features: ["Team leadership and project management", "Full-stack development", "Agile methodology implementation", "End-to-end development lifecycle"],
     status: "Completed",
     icon: <Users className="text-primary" size={24} />
