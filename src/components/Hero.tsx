@@ -25,7 +25,7 @@ const Hero = () => {
               </span>
             </h1>
             
-            <p className="text-xl text-muted-foreground mb-4 font-medium">Web Developer|Content Creator| Problem Solver</p>
+            <p className="text-xl text-muted-foreground mb-4 font-medium">Frontend Developer |Content Creator| Social Media Content Creator</p>
             
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
               Results-driven professional with a passion for technology and problem-solving. 
