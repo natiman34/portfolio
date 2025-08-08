@@ -92,7 +92,7 @@ const About = () => {
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold mb-4 text-primary">Core Strengths</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Problem Solving', 'Project Management', 'User Experience', 'Team Leadership', 'Technical Communication', 'Agile Development'].map((skill) => (
+                  {['Problem Solving', 'Project Management', 'Networking', 'Operating System', 'IT Support', 'Team Collaboration', 'Sales Associate', 'Customer Service', 'Microsoft Office', 'User Experience', 'Team Leadership', 'Technical Communication'].map((skill) => (
                     <span 
                       key={skill}
                       className="px-3 py-1 bg-accent/20 text-accent-vivid rounded-full text-sm font-medium"
