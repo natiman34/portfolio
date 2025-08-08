@@ -1,30 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Code, Globe, Smartphone, Settings, Shield, Zap } from 'lucide-react';
+import { Users, Globe, Settings, Zap } from 'lucide-react';
 
 const Services = () => {
   const services = [
     {
       icon: <Globe className="text-primary" size={32} />,
-      title: "Web Development",
-      description: "Full-stack web applications with modern technologies and responsive designs.",
+      title: "Frontend Development",
+      description: "Modern, responsive user interfaces with cutting-edge frontend technologies.",
       features: [
         "Responsive website design",
-        "Front-end & back-end development",
-        "Database integration",
+        "React & TypeScript development",
+        "Modern UI/UX implementation",
         "Performance optimization",
-        "SEO-friendly solutions"
-      ]
-    },
-    {
-      icon: <Code className="text-primary" size={32} />,
-      title: "Custom Development",
-      description: "Tailored software solutions to meet specific business requirements.",
-      features: [
-        "Custom web applications",
-        "API development & integration",
-        "Database design & management",
-        "Third-party integrations",
-        "Code optimization"
+        "Cross-browser compatibility"
       ]
     },
     {
@@ -40,39 +28,27 @@ const Services = () => {
       ]
     },
     {
-      icon: <Smartphone className="text-primary" size={32} />,
-      title: "Digital Solutions",
-      description: "Modern digital solutions to streamline business operations.",
+      icon: <Users className="text-primary" size={32} />,
+      title: "Salesperson",
+      description: "Professional sales services to drive business growth and revenue.",
       features: [
-        "Process automation",
-        "Digital transformation",
-        "System integration",
-        "Workflow optimization",
-        "Technology consulting"
-      ]
-    },
-    {
-      icon: <Shield className="text-primary" size={32} />,
-      title: "System Maintenance",
-      description: "Ongoing support to ensure your systems run smoothly and securely.",
-      features: [
-        "Regular system updates",
-        "Security monitoring",
-        "Backup solutions",
-        "Performance optimization",
-        "Proactive maintenance"
+        "Lead generation",
+        "Client relationship management",
+        "Sales strategy development",
+        "Product presentations",
+        "Revenue optimization"
       ]
     },
     {
       icon: <Zap className="text-primary" size={32} />,
-      title: "Deployment & Optimization",
-      description: "Efficient deployment strategies and performance optimization.",
+      title: "Content Creator",
+      description: "Engaging content creation for digital marketing and brand awareness.",
       features: [
-        "Application deployment",
-        "Cloud solutions",
-        "Performance tuning",
-        "Monitoring setup",
-        "Scalability planning"
+        "Social media content",
+        "Blog writing & copywriting",
+        "Visual content design",
+        "Brand storytelling",
+        "Content strategy planning"
       ]
     }
   ];
