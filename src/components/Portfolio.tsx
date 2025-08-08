@@ -14,13 +14,9 @@ const Portfolio = () => {
     icon: <Users className="text-primary" size={24} />
   }];
   const comingSoonProjects = [{
-    title: "E-commerce Platform",
-    description: "Modern e-commerce solution with integrated payment systems",
+    title: "Full Stack Web Application",
+    description: "Comprehensive web application with modern frontend and backend architecture",
     status: "Planning"
-  }, {
-    title: "Portfolio Management System",
-    description: "Client portfolio tracking and management application",
-    status: "In Development"
   }, {
     title: "Mobile App Development",
     description: "Cross-platform mobile application for business automation",
