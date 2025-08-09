@@ -1,9 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { GraduationCap, MapPin, User } from 'lucide-react';
-
 const About = () => {
-  return (
-    <section id="about" className="py-20 bg-muted/30">
+  return <section id="about" className="py-20 bg-muted/30">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12 fade-in">
           <h2 className="text-4xl font-bold text-foreground mb-4">
@@ -35,24 +33,12 @@ const About = () => {
             </div>
             
             <div className="mt-8 space-y-4 text-muted-foreground leading-relaxed">
-              <p>
-                Results-driven professional with a passion for technology and problem-solving. 
-                I combine expertise in sales, customer education, and Agile project management 
-                to drive digital adoption and operational efficiency.
-              </p>
+              <p>Frontend Developer with a Bachelor's in Computer Science (AAU) and AI certification. Built responsive UIs that increased client engagement by 15% at Kehsud Technologies. As a Content Creator at Dablie Foundation, developed tech-focused digital content. Skilled in performance optimization, accessibility, and user-centric design. Combines technical expertise with sales psychology to create business-aligned interfaces. Currently enhancing skills in modern frontend architectures while maintaining focus on intuitive user experiences.</p>
               
               <p>
-                Adept at bridging technical solutions with user needs, demonstrated through 
-                successful platform promotions and a collaborative web application project. 
-                My experience spans from content creation to hands-on development, always 
-                focused on creating meaningful impact through technology.
-              </p>
+            </p>
               
-              <p>
-                As a Computer Science graduate from Addis Ababa University, I'm committed 
-                to continuous growth and leveraging technology to solve real-world problems. 
-                I thrive in collaborative environments where innovation meets practical application.
-              </p>
+              <p>As a Computer Science graduate from Addis Ababa University, I'm committed to continuous growth and leveraging technology to real-world problems. I thrive in collaborative environments where innovation meets practical application.</p>
             </div>
           </div>
           
@@ -92,22 +78,15 @@ const About = () => {
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold mb-4 text-primary">Core Strengths</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Problem Solving', 'Project Management', 'Networking', 'Operating System', 'IT Support', 'Team Collaboration', 'Sales Associate', 'Customer Service', 'Microsoft Office', 'User Experience', 'Team Leadership', 'Technical Communication'].map((skill) => (
-                    <span 
-                      key={skill}
-                      className="px-3 py-1 bg-accent/20 text-accent-vivid rounded-full text-sm font-medium"
-                    >
+                  {['Problem Solving', 'Project Management', 'Networking', 'Operating System', 'IT Support', 'Team Collaboration', 'Sales Associate', 'Customer Service', 'Microsoft Office', 'User Experience', 'Team Leadership', 'Technical Communication'].map(skill => <span key={skill} className="px-3 py-1 bg-accent/20 text-accent-vivid rounded-full text-sm font-medium">
                       {skill}
-                    </span>
-                  ))}
+                    </span>)}
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default About;
