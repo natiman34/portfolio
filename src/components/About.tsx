@@ -33,12 +33,24 @@ const About = () => {
             </div>
             
             <div className="mt-8 space-y-4 text-muted-foreground leading-relaxed">
-              <p>Results-driven Computer Science graduate with a Bachelor of Science degree from Addis Ababa University and a certification in Artificial Intelligence Fundamentals from Udacity. Proficient in web development technologies, including HTML, CSS, and JavaScript, as well as tools like GitHub, and Supabase. Skilled in IT support, problem-solving, and project management, with hands-on experience in sales and social media content creation. Demonstrated success as a Sales Associate at Kehsud Technologies, exceeding targets and fostering strong client relationships. Adept at collaborating in team environments and leveraging technical expertise to drive organizational goals. Fluent in English and Amharic, with excellent communication and analytical abilities. Seeking to apply technical knowledge and professional experience in an IT-focused role to contribute to innovation and efficiency.</p>
+              <p>
+                I'm a Computer Science graduate from Addis Ababa University with a passion for creating 
+                innovative digital solutions. With expertise in web development technologies and a 
+                certification in AI Fundamentals from Udacity, I bring both technical skills and 
+                practical experience to every project.
+              </p>
               
               <p>
-            </p>
+                My experience spans frontend development, IT support, project management, and team 
+                collaboration. I've successfully led development teams, exceeded sales targets, and 
+                created engaging content for social media platforms. This diverse background allows 
+                me to approach problems from multiple perspectives and deliver comprehensive solutions.
+              </p>
               
-              <p>As a Computer Science graduate from Addis Ababa University, I'm committed to continuous growth and leveraging technology to real-world problems. I thrive in collaborative environments where innovation meets practical application.</p>
+              <p>
+                I thrive in collaborative environments where innovation meets practical application, 
+                always committed to continuous learning and leveraging technology to solve real-world challenges.
+              </p>
             </div>
           </div>
           

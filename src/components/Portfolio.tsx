@@ -8,10 +8,15 @@ const Portfolio = () => {
     title: "Final Year Web Application Project",
     role: "Project Manager & Developer",
     description: "Led a team to plan, build, and deploy a full-stack web application using Agile methodologies. Managed the entire development lifecycle from conception to deployment, ensuring efficient collaboration and timely delivery.",
-    technologies: ["React", "Node.js", "Supabase"],
+    technologies: ["React", "Node.js", "Supabase", "JavaScript", "CSS"],
     features: ["Team leadership and project management", "Full-stack development", "Agile methodology implementation", "End-to-end development lifecycle"],
+    problem: "Creating a scalable web application with efficient team collaboration",
+    impact: "Successfully delivered project on time with 100% team satisfaction",
     status: "Completed",
-    icon: <Users className="text-primary" size={24} />
+    icon: <Users className="text-primary" size={24} />,
+    demoUrl: "#",
+    githubUrl: "https://github.com/natiman34",
+    image: "/placeholder.svg"
   }];
   const comingSoonProjects = [{
     title: "Full Stack Web Application",
@@ -68,18 +73,39 @@ const Portfolio = () => {
                   </div>
                 </div>
                 
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold mb-2 text-primary">Problem Solved:</h4>
+                    <p className="text-sm text-muted-foreground">{project.problem}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2 text-primary">Impact:</h4>
+                    <p className="text-sm text-muted-foreground">{project.impact}</p>
+                  </div>
+                </div>
+
                 <div>
                   <h4 className="font-semibold mb-3 text-primary">Technologies Used:</h4>
                   <div className="flex flex-wrap gap-2">
-                    {project.technologies.map(tech => <Badge key={tech} variant="outline" className="border-primary/20 text-primary">
+                    {project.technologies.map(tech => <Badge key={tech} variant="outline" className="border-primary/20 text-primary hover:bg-primary hover:text-primary-foreground transition-colors">
                         {tech}
                       </Badge>)}
                   </div>
                 </div>
                 
                 <div className="flex space-x-4 pt-4">
-                  
-                  
+                  <Button asChild variant="default" className="hero-gradient text-primary-foreground hover-glow">
+                    <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink size={16} className="mr-2" />
+                      Live Demo
+                    </a>
+                  </Button>
+                  <Button asChild variant="outline" className="hover-glow">
+                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                      <Github size={16} className="mr-2" />
+                      GitHub Repo
+                    </a>
+                  </Button>
                 </div>
               </CardContent>
             </Card>)}
