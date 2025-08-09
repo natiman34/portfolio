@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Mail, Phone, Github, Linkedin, MapPin, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const { toast } = useToast();
@@ -15,23 +16,47 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    // Netlify Forms will handle the submission automatically
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for your message. I'll get back to you soon.",
-    });
+    try {
+      await emailjs.send(
+        'service_yhnqjss', // your service ID
+        'template_c63z6jz', // your template ID
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        'fJ0DDz2xjeCcPtOx6' // your public key
+      );
 
-    // Reset form after submission
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    });
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for your message. I'll get back to you soon.",
+      });
+
+      // Reset form after successful submission
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -168,9 +193,6 @@ const Contact = () => {
             
             <CardContent>
               <form 
-                name="contact" 
-                method="POST" 
-                data-netlify="true"
                 onSubmit={handleSubmit} 
                 className="space-y-6"
               >
@@ -228,11 +250,12 @@ const Contact = () => {
                 
                 <Button 
                   type="submit" 
+                  disabled={isLoading}
                   className="w-full hero-gradient text-primary-foreground hover-glow"
                   size="lg"
                 >
                   <Send size={20} className="mr-2" />
-                  Send Message
+                  {isLoading ? 'Sending...' : 'Send Message'}
                 </Button>
               </form>
             </CardContent>
