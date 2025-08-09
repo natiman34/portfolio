@@ -28,7 +28,7 @@ const Hero = () => {
             <p className="text-xl text-muted-foreground mb-4 font-medium">Frontend Developer | Social Media Content
 Creator | SalesPerson</p>
             
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl">Results-driven professional with a passion for technology and problem-solving. I combine expertise in Frontend Development and IT support to create meaningful digital solutions and drive operational efficiency.</p>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl">Motivated and Skilled professional with a passion for technology and problem-solving. I combine expertise in Frontend Development and IT support to create meaningful digital solutions and drive operational efficiency.</p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
               <Button size="lg" className="hero-gradient text-primary-foreground hover-glow" onClick={() => scrollToSection('portfolio')}>
