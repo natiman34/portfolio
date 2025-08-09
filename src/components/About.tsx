@@ -33,9 +33,7 @@ const About = () => {
             </div>
             
             <div className="mt-8 space-y-4 text-muted-foreground leading-relaxed">
-              <p>Results-driven Computer Science graduate with a Bachelor of Science degree from Addis Ababa University and a certification in Artificial Intelligence Fundamentals from Udacity. Proficient in web development technologies, including HTML, CSS, and JavaScript, as well as tools like Git, GitHub, and Supabase. Skilled in IT support, problem-solving, and project management, with hands-on experience in sales and social media content creation.
-
-Demonstrated success as a Sales Associate at Kehsud Technologies, exceeding targets and fostering strong client relationships. Adept at collaborating in team environments and leveraging technical expertise to drive organizational goals. Fluent in English and Amharic, with excellent communication and analytical abilities. Seeking to apply technical knowledge and professional experience in an IT-focused role to contribute to innovation and efficiency.</p>
+              <p>Results-driven Computer Science graduate with a Bachelor of Science degree from Addis Ababa University and a certification in Artificial Intelligence Fundamentals from Udacity. Proficient in web development technologies, including HTML, CSS, and JavaScript, as well as tools like GitHub, and Supabase. Skilled in IT support, problem-solving, and project management, with hands-on experience in sales and social media content creation. Demonstrated success as a Sales Associate at Kehsud Technologies, exceeding targets and fostering strong client relationships. Adept at collaborating in team environments and leveraging technical expertise to drive organizational goals. Fluent in English and Amharic, with excellent communication and analytical abilities. Seeking to apply technical knowledge and professional experience in an IT-focused role to contribute to innovation and efficiency.</p>
               
               <p>
             </p>
