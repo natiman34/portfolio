@@ -20,14 +20,8 @@ const Skills = () => {
     {
       title: "Frontend Development",
       icon: <Code className="text-primary" size={28} />,
-      skills: ["HTML/CSS", "JavaScript", "React", "Tailwind CSS", "Responsive Design", "UI/UX Design"],
+      skills: ["HTML/CSS", "JavaScript", "React", "Tailwind CSS", "Responsive Design"],
       color: "bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800"
-    },
-    {
-      title: "Backend & Database",
-      icon: <Server className="text-primary" size={28} />,
-      skills: ["Node.js", "Supabase", "API Development", "Database Design", "Authentication"],
-      color: "bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800"
     },
     {
       title: "Tools & Technologies",
