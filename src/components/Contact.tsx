@@ -1,265 +1,448 @@
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect, useRef, useState } from 'react';
+import emailjs from '@emailjs/browser';
+import {
+  AlertCircle,
+  CheckCircle2,
+  Github,
+  Globe,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  Send,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Mail, Phone, Github, Linkedin, MapPin, Send } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import emailjs from '@emailjs/browser';
+import { PROFILE } from '@/data/portfolioData';
+import {
+  checkSpamGuard,
+  validateContactForm,
+  type ContactFormErrors,
+  type ContactFormValues,
+} from '@/utils/portfolio';
 
-const Contact = () => {
+interface ContactProps {
+  presetSubject?: string;
+  focusTrigger?: number;
+}
+
+const Contact = ({ presetSubject, focusTrigger = 0 }: ContactProps) => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
+  const lastSubmittedAtRef = useRef<number | null>(null);
+
+  const [formData, setFormData] = useState<ContactFormValues>({
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
+    honeypot: '',
   });
+  const [errors, setErrors] = useState<ContactFormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState('');
+
+  useEffect(() => {
+    if (presetSubject) {
+      setFormData((prev) => ({
+        ...prev,
+        subject: presetSubject,
+      }));
+      setErrors((prev) => ({ ...prev, subject: undefined }));
+    }
+  }, [presetSubject, focusTrigger]);
+
+  useEffect(() => {
+    if (focusTrigger > 0) {
+      nameInputRef.current?.focus();
+    }
+  }, [focusTrigger]);
+
+  const applyQuickSubject = (subjectText: string) => {
+    setFormData((prev) => ({ ...prev, subject: subjectText }));
+    setErrors((prev) => ({ ...prev, subject: undefined }));
+    setSubmitStatus('idle');
+    nameInputRef.current?.focus();
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const field = e.target.name as keyof ContactFormValues;
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (field !== 'honeypot' && errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+    if (submitStatus !== 'idle') {
+      setSubmitStatus('idle');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const spamCheck = checkSpamGuard({
+      honeypot: formData.honeypot,
+      lastSubmittedAt: lastSubmittedAtRef.current,
+      now: Date.now(),
+      cooldownMs: 30_000,
+    });
+
+    if (!spamCheck.allowed) {
+      if (spamCheck.reason === 'honeypot') {
+        setSubmitStatus('error');
+        setStatusMessage('Submission blocked by spam verification.');
+        return;
+      }
+      setSubmitStatus('error');
+      setStatusMessage(
+        `Please wait ${spamCheck.waitSeconds ?? 30}s before sending another message.`
+      );
+      return;
+    }
+
+    const validation = validateContactForm(formData);
+    if (!validation.valid) {
+      setErrors(validation.errors);
+      setSubmitStatus('error');
+      setStatusMessage('Please review the highlighted fields before sending.');
+      return;
+    }
+
+    setErrors({});
     setIsLoading(true);
-    
+    setSubmitStatus('idle');
+
     try {
       await emailjs.send(
-        'service_yhnqjss', // your service ID
-        'template_c63z6jz', // your template ID
+        'service_yhnqjss',
+        'template_c63z6jz',
         {
-          from_name: formData.name,
-          from_email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
+          from_name: formData.name.trim(),
+          from_email: formData.email.trim(),
+          subject: formData.subject.trim(),
+          message: formData.message.trim(),
         },
-        'fJ0DDz2xjeCcPtOx6' // your public key
+        'fJ0DDz2xjeCcPtOx6'
       );
 
+      lastSubmittedAtRef.current = Date.now();
+      setSubmitStatus('success');
+      setStatusMessage("Thank you for your message. I'll respond shortly.");
       toast({
-        title: "Message Sent!",
+        title: 'Message Sent!',
         description: "Thank you for your message. I'll get back to you soon.",
       });
 
-      // Reset form after successful submission
       setFormData({
         name: '',
         email: '',
         subject: '',
-        message: ''
+        message: '',
+        honeypot: '',
       });
     } catch (error) {
       console.error('Failed to send email:', error);
+      setSubmitStatus('error');
+      setStatusMessage(
+        `Unable to send via the form right now. Please email me directly at ${PROFILE.email}.`
+      );
       toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive",
+        title: 'Delivery Error',
+        description: `Please try again or email ${PROFILE.email} directly.`,
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
-
-  const contactInfo = [
-    {
-      icon: <Mail className="text-primary" size={24} />,
-      label: "Email",
-      value: "natim0570@gmail.com",
-      href: "mailto:natim0570@gmail.com"
-    },
-    {
-      icon: <Phone className="text-primary" size={24} />,
-      label: "Phone",
-      value: "0929130879",
-      href: "tel:0929130879"
-    },
-    {
-      icon: <MapPin className="text-primary" size={24} />,
-      label: "Location",
-      value: "Addis Ababa, Ethiopia",
-      href: null
-    }
-  ];
-
-  const socialLinks = [
-    {
-      icon: <Github size={24} />,
-      label: "GitHub",
-      href: "https://github.com/natiman34",
-      username: "natiman34"
-    },
-    {
-      icon: <Linkedin size={24} />,
-      label: "LinkedIn",
-      href: "https://www.linkedin.com/in/natnaelsema",
-      username: "natnaelsema"
-    }
-  ];
-
   return (
-    <section id="contact" className="py-20">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12 fade-in">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            Get In Touch
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Let's discuss your project and how I can help bring your ideas to life
+    <section id="contact" className="py-20 lg:py-24 bg-muted/25">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="max-w-3xl mb-12">
+          <p className="text-sm font-medium text-primary mb-2">
+            Contact &amp; Opportunities
           </p>
-        </div>
-        
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Contact Information */}
-          <div className="space-y-8 slide-up">
-            <div>
-              <h3 className="text-2xl font-semibold mb-6 text-primary">
-                Contact Information
-              </h3>
-              
-              <div className="space-y-4">
-                {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-center space-x-4">
-                    <div className="flex-shrink-0">
-                      {info.icon}
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground">{info.label}</p>
-                      {info.href ? (
-                        <a 
-                          href={info.href}
-                          className="text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          {info.value}
-                        </a>
-                      ) : (
-                        <p className="text-muted-foreground">{info.value}</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-2xl font-semibold mb-6 text-primary">
-                Follow Me
-              </h3>
-              
-              <div className="space-y-4">
-                {socialLinks.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center space-x-4 text-muted-foreground hover:text-primary transition-colors group"
-                  >
-                    <div className="group-hover:scale-110 transition-transform">
-                      {social.icon}
-                    </div>
-                    <div>
-                      <p className="font-medium">{social.label}</p>
-                      <p className="text-sm">@{social.username}</p>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-            
-            <Card className="card-gradient shadow-card">
-              <CardContent className="p-6">
-                <h4 className="font-semibold mb-2 text-primary">Available for:</h4>
-                <ul className="space-y-1 text-sm text-muted-foreground">
-                  <li>• Full-time opportunities</li>
-                  <li>• Freelance projects</li>
-                  <li>• Technical consulting</li>
-                  <li>• Collaboration opportunities</li>
-                </ul>
-              </CardContent>
-            </Card>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
+            Have a project or role in mind? Let&apos;s connect.
+          </h2>
+          <p className="text-base text-muted-foreground mb-6">
+            Open to IT Support roles, Junior Full-Stack &amp; Frontend Developer positions, and remote freelance web application projects.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              type="button"
+              onClick={() => applyQuickSubject('Freelance Web Development Inquiry')}
+              className="hero-primary-btn h-10 px-5 text-sm font-medium whitespace-nowrap shrink-0"
+            >
+              Hire Me
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => applyQuickSubject('IT Support / Developer Role Inquiry')}
+              className="h-10 px-5 text-sm font-medium border-border bg-card whitespace-nowrap shrink-0"
+            >
+              Discuss a Role or Project
+            </Button>
+            <Button
+              asChild
+              variant="ghost"
+              className="h-10 px-4 text-sm font-medium text-muted-foreground hover:text-foreground whitespace-nowrap shrink-0"
+            >
+              <a href={`mailto:${PROFILE.email}`}>Email Directly</a>
+            </Button>
           </div>
-          
-          {/* Contact Form */}
-          <Card className="card-gradient shadow-card hover-glow slide-up">
-            <CardHeader>
-              <CardTitle className="text-2xl text-primary">Send a Message</CardTitle>
-            </CardHeader>
-            
-            <CardContent>
-              <form 
-                onSubmit={handleSubmit} 
-                className="space-y-6"
-              >
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="border-border focus:border-primary"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="border-border focus:border-primary"
-                    />
-                  </div>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-5 space-y-5 min-w-0">
+            <div className="surface-card p-5 sm:p-6 space-y-5 min-w-0">
+              <div className="flex items-start gap-3.5 min-w-0">
+                <Globe className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                <div className="min-w-0">
+                  <h3 className="text-sm font-semibold text-foreground">Availability</h3>
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    {PROFILE.availability}
+                  </p>
                 </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="subject">Subject</Label>
-                  <Input
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className="border-border focus:border-primary"
-                  />
+              </div>
+
+              <div className="flex items-start gap-3.5 pt-4 border-t border-border min-w-0">
+                <Mail className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                <div className="min-w-0">
+                  <h3 className="text-sm font-semibold text-foreground">Email</h3>
+                  <a
+                    href={`mailto:${PROFILE.email}`}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors mt-0.5 inline-block break-all"
+                  >
+                    {PROFILE.email}
+                  </a>
                 </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={6}
-                    className="border-border focus:border-primary resize-none"
-                  />
+              </div>
+
+              <div className="flex items-start gap-3.5 pt-4 border-t border-border min-w-0">
+                <Phone className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                <div className="min-w-0">
+                  <h3 className="text-sm font-semibold text-foreground">Phone</h3>
+                  <a
+                    href={PROFILE.phoneHref}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors mt-0.5 inline-block font-mono tabular-nums"
+                  >
+                    {PROFILE.phone}
+                  </a>
                 </div>
-                
-                <Button 
-                  type="submit" 
-                  disabled={isLoading}
-                  className="w-full hero-gradient text-primary-foreground hover-glow"
-                  size="lg"
+              </div>
+
+              <div className="flex items-start gap-3.5 pt-4 border-t border-border min-w-0">
+                <MapPin className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                <div className="min-w-0">
+                  <h3 className="text-sm font-semibold text-foreground">Location</h3>
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    {PROFILE.location}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="surface-card p-5 sm:p-6 space-y-4 min-w-0">
+              <h3 className="font-display text-base font-semibold text-foreground">
+                Professional Profiles
+              </h3>
+              <div className="space-y-3">
+                <a
+                  href={PROFILE.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between gap-2 p-3 rounded-lg border border-border bg-background/60 hover:border-primary/40 transition-colors min-w-0"
                 >
-                  <Send size={20} className="mr-2" />
-                  {isLoading ? 'Sending...' : 'Send Message'}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                  <span className="flex items-center gap-3 text-sm font-medium text-foreground shrink-0">
+                    <Linkedin className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                    LinkedIn
+                  </span>
+                  <span className="text-xs text-muted-foreground truncate min-w-0">
+                    linkedin.com/in/natnaelsema
+                  </span>
+                </a>
+
+                <a
+                  href={PROFILE.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between gap-2 p-3 rounded-lg border border-border bg-background/60 hover:border-primary/40 transition-colors min-w-0"
+                >
+                  <span className="flex items-center gap-3 text-sm font-medium text-foreground shrink-0">
+                    <Github className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                    GitHub
+                  </span>
+                  <span className="text-xs text-muted-foreground truncate min-w-0">
+                    github.com/natiman34
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-7 surface-card p-5 sm:p-8 min-w-0">
+            <h3 className="font-display text-xl font-semibold text-foreground mb-1">
+              Send a Message
+            </h3>
+            <p className="text-sm text-muted-foreground mb-6">
+              Delivered via EmailJS with direct fallback to{' '}
+              <a
+                href={`mailto:${PROFILE.email}`}
+                className="text-primary hover:underline"
+              >
+                {PROFILE.email}
+              </a>
+              .
+            </p>
+
+            {submitStatus !== 'idle' && (
+              <div
+                role="status"
+                aria-live="polite"
+                className={`mb-6 p-4 rounded-lg border flex items-start gap-3 text-sm ${
+                  submitStatus === 'success'
+                    ? 'bg-primary/10 border-primary/30 text-foreground'
+                    : 'bg-destructive/10 border-destructive/30 text-foreground'
+                }`}
+              >
+                {submitStatus === 'success' ? (
+                  <CheckCircle2
+                    className="h-4 w-4 text-primary shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <AlertCircle
+                    className="h-4 w-4 text-destructive shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                )}
+                <span>{statusMessage}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} noValidate className="space-y-5">
+              {/* Honeypot spam protection field */}
+              <div className="sr-only" aria-hidden="true">
+                <Label htmlFor="contact-website">Website</Label>
+                <Input
+                  id="contact-website"
+                  name="honeypot"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={formData.honeypot || ''}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="contact-name" className="text-sm font-medium text-foreground">
+                    Name
+                  </Label>
+                  <Input
+                    ref={nameInputRef}
+                    id="contact-name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Your name"
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? 'contact-name-error' : undefined}
+                    className="bg-background border-input h-11"
+                  />
+                  {errors.name && (
+                    <p id="contact-name-error" className="text-xs text-destructive">
+                      {errors.name}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="contact-email" className="text-sm font-medium text-foreground">
+                    Email
+                  </Label>
+                  <Input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={errors.email ? 'contact-email-error' : undefined}
+                    className="bg-background border-input h-11"
+                  />
+                  {errors.email && (
+                    <p id="contact-email-error" className="text-xs text-destructive">
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="contact-subject" className="text-sm font-medium text-foreground">
+                  Subject
+                </Label>
+                <Input
+                  id="contact-subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  placeholder="Web application, IT support role, or consultation"
+                  aria-invalid={Boolean(errors.subject)}
+                  aria-describedby={errors.subject ? 'contact-subject-error' : undefined}
+                  className="bg-background border-input h-11"
+                />
+                {errors.subject && (
+                  <p id="contact-subject-error" className="text-xs text-destructive">
+                    {errors.subject}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="contact-message" className="text-sm font-medium text-foreground">
+                  Message
+                </Label>
+                <Textarea
+                  id="contact-message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={5}
+                  placeholder="Share your role details, project goals, or timeline..."
+                  aria-invalid={Boolean(errors.message)}
+                  aria-describedby={errors.message ? 'contact-message-error' : undefined}
+                  className="bg-background border-input resize-y"
+                />
+                {errors.message && (
+                  <p id="contact-message-error" className="text-xs text-destructive">
+                    {errors.message}
+                  </p>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full h-11 hero-primary-btn font-medium"
+              >
+                <Send className="h-4 w-4 mr-2" aria-hidden="true" />
+                {isLoading ? 'Sending Message...' : 'Send Message'}
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </section>

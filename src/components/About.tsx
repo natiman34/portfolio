@@ -1,104 +1,73 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { GraduationCap, MapPin, User } from 'lucide-react';
+import { GraduationCap, MapPin, Briefcase, Code2 } from 'lucide-react';
+import { EDUCATION, PROFILE } from '@/data/portfolioData';
+
 const About = () => {
-  return <section id="about" className="py-20 bg-muted/30">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12 fade-in">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            About Me
+  return (
+    <section id="about" className="py-20 lg:py-24 border-b border-border">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="max-w-2xl mb-12">
+          <p className="text-sm font-medium text-primary mb-2">About Me</p>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
+            Combining web development with real-world systems support
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Passionate about bridging technology with user needs
-          </p>
         </div>
-        
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Bio Content */}
-          <div className="slide-up">
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3 text-lg">
-                <User className="text-primary" size={24} />
-                <span className="font-semibold">Natnael Sema</span>
-              </div>
-              
-              <div className="flex items-center space-x-3 text-lg">
-                <MapPin className="text-primary" size={24} />
-                <span>Addis Ababa, Ethiopia</span>
-              </div>
-              
-              <div className="flex items-center space-x-3 text-lg">
-                <GraduationCap className="text-primary" size={24} />
-                <span>Computer Science Graduate (Class of 2025)</span>
-              </div>
-            </div>
-            
-            <div className="mt-8 space-y-4 text-muted-foreground leading-relaxed">
-              <p>
-                I'm a Computer Science graduate from Addis Ababa University with a passion for creating 
-                innovative digital solutions. With expertise in web development technologies and a 
-                certification in AI Fundamentals from Udacity, I bring both technical skills and 
-                practical experience to every project.
+
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+          {/* Narrative */}
+          <div className="lg:col-span-7 space-y-5 text-base sm:text-[17px] text-muted-foreground leading-relaxed">
+            {PROFILE.aboutParagraphs.map((paragraph, idx) => (
+              <p key={idx} className={idx === 0 ? 'text-foreground/90' : ''}>
+                {paragraph}
               </p>
-              
-              <p>
-                My experience spans frontend development, IT support, project management, and team 
-                collaboration. I've successfully led development teams, exceeded sales targets, and 
-                created engaging content for social media platforms. This diverse background allows 
-                me to approach problems from multiple perspectives and deliver comprehensive solutions.
-              </p>
-              
-              <p>
-                I thrive in collaborative environments where innovation meets practical application, 
-                always committed to continuous learning and leveraging technology to solve real-world challenges.
-              </p>
-            </div>
+            ))}
           </div>
-          
-          {/* Skills & Achievements */}
-          <div className="space-y-6 slide-up">
-            <Card className="card-gradient shadow-card hover-glow">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-primary">Education</h3>
-                <div className="space-y-2">
-                  <h4 className="font-medium">BSc in Computer Science</h4>
-                  <p className="text-muted-foreground">Addis Ababa University</p>
-                  <p className="text-sm text-muted-foreground">Class of 2025</p>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="card-gradient shadow-card hover-glow">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-primary">Recent Experience</h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-medium">Social Media Content Creator</h4>
-                    <p className="text-sm text-muted-foreground">Dablie Foundation (May 2025 – Jun 2025)</p>
-                    <p className="text-sm mt-1">Created tech-focused content and educational posts</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium">Sales Associate</h4>
-                    <p className="text-sm text-muted-foreground">Gebeyax (Mar 2023 – Apr 2024)</p>
-                    <p className="text-sm mt-1">Boosted client engagement by 15%, trained users on app functionality</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="card-gradient shadow-card hover-glow">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-primary">Core Strengths</h3>
-                <div className="flex flex-wrap gap-2">
-                  {['Problem Solving', 'Project Management', 'Networking', 'Operating System', 'IT Support', 'Team Collaboration', 'Sales Associate', 'Customer Service', 'Microsoft Office', 'User Experience', 'Team Leadership', 'Technical Communication'].map(skill => <span key={skill} className="px-3 py-1 bg-accent/20 text-accent-vivid rounded-full text-sm font-medium">
-                      {skill}
-                    </span>)}
-                </div>
-              </CardContent>
-            </Card>
+
+          {/* Factual Snapshot */}
+          <div className="lg:col-span-5 surface-card p-6 space-y-5">
+            <div className="flex items-start gap-3.5 pb-4 border-b border-border">
+              <Code2 className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Primary Focus</h3>
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  Full Stack Web Development, Frontend Interfaces &amp; Web Applications
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5 pb-4 border-b border-border">
+              <Briefcase className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Supporting Strength</h3>
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  IT Support, Windows 11 Systems, Hardware &amp; Network Diagnostics
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5 pb-4 border-b border-border">
+              <GraduationCap className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">{EDUCATION.degree}</h3>
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  {EDUCATION.institution} · {EDUCATION.period}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5">
+              <MapPin className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">{PROFILE.location}</h3>
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  Open to remote freelance web development &amp; technical projects
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default About;

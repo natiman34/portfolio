@@ -1,24 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Natnael Sema - Web Developer & IT Specialist | Addis Ababa</title>
-    <meta name="description" content="Results-driven web developer and IT specialist from Addis Ababa, Ethiopia. Specializing in modern web applications, project management, and technical solutions." />
+    <title>Natnael Sema | Full Stack Developer &amp; IT Support Specialist</title>
+    <meta
+      name="description"
+      content="Natnael Sema is a Full Stack Developer and IT Support Specialist in Addis Ababa, Ethiopia, building responsive web applications and reliable technical solutions."
+    />
     <meta name="author" content="Natnael Sema" />
-    <meta name="keywords" content="web developer, IT support, Addis Ababa, Ethiopia, software developer, project manager, tech specialist" />
+    <meta
+      name="keywords"
+      content="Natnael Sema, Full Stack Developer, IT Support Technician, Frontend Developer, Web Application Developer, Networking, Addis Ababa, Remote Developer"
+    />
+    <link rel="icon" href="/favicon.ico" />
 
-    <meta property="og:title" content="Natnael Sema - Web Developer & IT Specialist" />
-    <meta property="og:description" content="Results-driven web developer and IT specialist from Addis Ababa, Ethiopia. Specializing in modern web applications and technical solutions." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:site_name" content="Natnael Sema Portfolio" />
+    <meta
+      property="og:title"
+      content="Natnael Sema | Full Stack Developer &amp; IT Support Specialist"
+    />
+    <meta
+      property="og:description"
+      content="Full Stack Developer and IT Support Specialist building responsive web applications, practical tools, and dependable IT solutions."
+    />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta
+      name="twitter:title"
+      content="Natnael Sema | Full Stack Developer &amp; IT Support Specialist"
+    />
+    <meta
+      name="twitter:description"
+      content="Full Stack Developer and IT Support Specialist building responsive web applications, practical tools, and dependable IT solutions."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      (function () {
+        try {
+          var pref = localStorage.getItem('portfolio-theme') || 'dark';
+          var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = pref === 'dark' || (pref === 'system' && systemDark);
+          document.documentElement.classList.toggle('dark', isDark);
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Natnael Sema",
+        "jobTitle": "Full Stack Developer & IT Support Specialist",
+        "email": "mailto:natim0570@gmail.com",
+        "telephone": "+251929130879",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Addis Ababa",
+          "addressCountry": "ET"
+        },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Addis Ababa University"
+        },
+        "sameAs": [
+          "https://github.com/natiman34",
+          "https://www.linkedin.com/in/natnaelsema"
+        ],
+        "knowsAbout": [
+          "Full Stack Web Development",
+          "Frontend Development",
+          "Responsive Web Design",
+          "JavaScript",
+          "TypeScript",
+          "React",
+          "IT Support",
+          "Windows 11 Administration",
+          "Computer Networking",
+          "Cybersecurity Fundamentals"
+        ]
+      }
+    </script>
   </head>
 
-  <body>
+  <body class="bg-background text-foreground antialiased selection:bg-primary/25 selection:text-foreground">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

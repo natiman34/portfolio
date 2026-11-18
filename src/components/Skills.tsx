@@ -1,117 +1,120 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Code, 
-  Server, 
-  Wrench, 
-  Users, 
-  Globe, 
-  Database,
-  Smartphone,
-  GitBranch,
-  Brain,
-  MessageCircle,
-  Target,
-  Handshake
+import { useState } from 'react';
+import {
+  Check,
+  Code2,
+  MonitorCog,
+  Network,
+  Shield,
+  Wrench,
 } from 'lucide-react';
+import { SKILL_CATEGORIES } from '@/data/portfolioData';
+import { filterSkillsByGroup, type SkillGroupKey } from '@/utils/portfolio';
+
+const CATEGORY_ICONS: Record<string, typeof Code2> = {
+  development: Code2,
+  'it-support': MonitorCog,
+  networking: Network,
+  cybersecurity: Shield,
+  tools: Wrench,
+};
+
+const SKILL_GROUPS: readonly SkillGroupKey[] = [
+  'All',
+  'Development',
+  'IT & Networking',
+  'Security & Tools',
+] as const;
 
 const Skills = () => {
-  const skillCategories = [
-    {
-      title: "Frontend Development",
-      icon: <Code className="text-primary" size={28} />,
-      skills: ["HTML/CSS", "JavaScript", "React", "Tailwind CSS", "Responsive Design"],
-      color: "bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800"
-    },
-    {
-      title: "Tools & Technologies",
-      icon: <Wrench className="text-primary" size={28} />,
-      skills: ["Git/GitHub", "Microsoft Office", "Operating Systems", "IT Support", "Project Management"],
-      color: "bg-purple-50 border-purple-200 dark:bg-purple-950 dark:border-purple-800"
-    },
-    {
-      title: "Professional Skills",
-      icon: <Users className="text-primary" size={28} />,
-      skills: ["Team Collaboration", "Problem Solving", "Customer Service", "Sales", "Technical Communication", "Leadership"],
-      color: "bg-orange-50 border-orange-200 dark:bg-orange-950 dark:border-orange-800"
-    }
-  ];
-
-  const certifications = [
-    {
-      title: "BSc Computer Science",
-      institution: "Addis Ababa University",
-      year: "2025",
-      icon: <Brain className="text-primary" size={20} />
-    },
-    {
-      title: "AI Fundamentals",
-      institution: "Udacity",
-      year: "2024",
-      icon: <Globe className="text-primary" size={20} />
-    }
-  ];
+  const [selectedGroup, setSelectedGroup] = useState<SkillGroupKey>('All');
+  const visibleCategories = filterSkillsByGroup(SKILL_CATEGORIES, selectedGroup);
 
   return (
-    <section id="skills" className="py-20 bg-muted/30">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12 fade-in">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            Skills & Expertise
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Technical proficiencies and professional competencies that drive results
-          </p>
+    <section id="skills" className="py-20 lg:py-24 bg-muted/25 border-b border-border">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
+          <div className="max-w-2xl">
+            <p className="text-sm font-medium text-primary mb-2">Technical Skills</p>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-3">
+              Capabilities across web development, IT operations, and networking
+            </h2>
+            <p className="text-base text-muted-foreground">
+              Structured competencies grounded in real coursework, full-stack application builds, and hands-on IT support work.
+            </p>
+          </div>
+
+          <div
+            role="group"
+            aria-label="Filter skills by discipline"
+            className="flex flex-wrap items-center gap-1.5 p-1 rounded-lg bg-secondary/70 border border-border self-start lg:self-auto"
+          >
+            {SKILL_GROUPS.map((group) => {
+              const isSelected = selectedGroup === group;
+              return (
+                <button
+                  key={group}
+                  type="button"
+                  onClick={() => setSelectedGroup(group)}
+                  aria-pressed={isSelected}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap shrink-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                    isSelected
+                      ? 'bg-card text-foreground shadow-sm border border-border'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {group}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Skills Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-16">
-          {skillCategories.map((category, index) => (
-            <Card key={index} className={`card-gradient shadow-card hover-glow slide-up ${category.color}`}>
-              <CardHeader>
-                <div className="flex items-center space-x-3">
-                  {category.icon}
-                  <CardTitle className="text-xl text-primary">{category.title}</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <Badge 
-                      key={skillIndex} 
-                      variant="secondary" 
-                      className="bg-background/80 text-foreground border-primary/20 hover:bg-primary hover:text-primary-foreground transition-colors"
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {visibleCategories.map((category) => {
+            const Icon = CATEGORY_ICONS[category.id] || Code2;
 
-        {/* Education & Certifications */}
-        <div className="slide-up">
-          <h3 className="text-2xl font-semibold mb-8 text-center text-primary">Education & Certifications</h3>
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {certifications.map((cert, index) => (
-              <Card key={index} className="card-gradient shadow-card hover-glow">
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 mt-1">
-                      {cert.icon}
-                    </div>
+            return (
+              <div
+                key={category.id}
+                className="surface-card p-6 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-3 mb-4 pb-4 border-b border-border">
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">{cert.title}</h4>
-                      <p className="text-sm text-muted-foreground mb-1">{cert.institution}</p>
-                      <p className="text-xs text-primary font-medium">{cert.year}</p>
+                      <p className="text-xs font-medium text-muted-foreground mb-1">
+                        {category.group}
+                      </p>
+                      <h3 className="font-display text-lg font-semibold text-foreground">
+                        {category.title}
+                      </h3>
+                    </div>
+                    <div className="h-9 w-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+                      <Icon className="h-4 w-4 text-primary" aria-hidden="true" />
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+
+                  <p className="text-sm text-muted-foreground mb-5">
+                    {category.subtitle}
+                  </p>
+
+                  <ul className="space-y-2.5">
+                    {category.items.map((skill) => (
+                      <li
+                        key={skill}
+                        className="flex items-center gap-2.5 text-sm text-foreground/90"
+                      >
+                        <Check
+                          className="h-3.5 w-3.5 text-primary shrink-0"
+                          aria-hidden="true"
+                        />
+                        <span>{skill}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
