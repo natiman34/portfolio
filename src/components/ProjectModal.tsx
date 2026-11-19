@@ -72,17 +72,17 @@ const ProjectModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[88vh] overflow-y-auto bg-card border-border text-foreground p-5 sm:p-6">
-        <DialogHeader className="text-left pb-3 border-b border-border">
-          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-1">
-            <span className="font-medium text-primary">{project.category}</span>
-            <span aria-hidden="true">·</span>
+      <DialogContent className="max-h-[88vh] max-w-3xl overflow-y-auto rounded-xl border-border bg-card p-5 text-foreground sm:p-7">
+        <DialogHeader className="border-b border-border pb-4 text-left">
+          <p className="meta-row">
+            <span className="text-primary">{project.category}</span>
+            <span aria-hidden="true">/</span>
             <span>{project.role}</span>
-          </div>
-          <DialogTitle className="font-display text-xl sm:text-2xl text-foreground">
+          </p>
+          <DialogTitle className="heading-sub mt-2 text-left">
             {project.title}
           </DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground pt-1">
+          <DialogDescription className="pt-1.5 text-sm leading-relaxed text-muted-foreground">
             {project.summary}
           </DialogDescription>
         </DialogHeader>
@@ -211,27 +211,27 @@ const ProjectModal = ({
           )}
 
           {/* Problem / Solution / Architecture Grid */}
-          <div className="grid sm:grid-cols-2 gap-3">
-            <div className="p-3.5 rounded-lg border border-border bg-background/70">
-              <h4 className="text-xs font-semibold text-primary mb-1.5">Problem</h4>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-lg border border-border bg-background/70 p-4">
+              <h4 className="eyebrow text-primary">Problem</h4>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
                 {project.problemSolved}
               </p>
             </div>
-            <div className="p-3.5 rounded-lg border border-border bg-background/70">
-              <h4 className="text-xs font-semibold text-primary mb-1.5">Solution</h4>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            <div className="rounded-lg border border-border bg-background/70 p-4">
+              <h4 className="eyebrow text-primary">Solution</h4>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
                 {project.solution}
               </p>
             </div>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-border bg-background/70">
-            <div className="flex items-center gap-2 mb-1.5">
+          <div className="rounded-lg border border-border bg-background/70 p-4">
+            <div className="flex items-center gap-2">
               <Layers className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-              <h4 className="text-xs font-semibold text-foreground">Architecture</h4>
+              <h4 className="eyebrow text-foreground">Architecture</h4>
             </div>
-            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
               {project.architecture}
             </p>
           </div>
@@ -280,26 +280,28 @@ const ProjectModal = ({
           </div>
 
           {/* Technologies */}
-          <div className="pt-2 border-t border-border">
-            <p className="text-xs font-mono text-muted-foreground">
-              <span className="font-sans font-semibold text-foreground mr-2">
-                Stack:
-              </span>
-              {project.technologies.join(' · ')}
-            </p>
+          <div className="border-t border-border pt-3">
+            <p className="eyebrow mb-2">Stack</p>
+            <ul className="flex flex-wrap gap-1.5">
+              {project.technologies.map((technology) => (
+                <li key={technology} className="tag">
+                  {technology}
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border">
+          <div className="flex flex-wrap items-center gap-3 border-t border-border pt-4">
             {project.sourceUrl && (
-              <Button asChild variant="outline" size="sm" className="h-9 px-4">
+              <Button asChild variant="outline" size="sm" className="h-9 rounded-lg px-4 text-xs">
                 <a
                   href={project.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Github className="h-4 w-4 mr-2" aria-hidden="true" />
-                  View Source
+                  <Github className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Repository
                 </a>
               </Button>
             )}
@@ -310,10 +312,10 @@ const ProjectModal = ({
                 onOpenChange(false);
                 onInquireProject(project.title);
               }}
-              className="hero-primary-btn h-9 px-4"
+              className="h-9 rounded-lg px-4 text-xs font-medium"
             >
-              <ExternalLink className="h-4 w-4 mr-2" aria-hidden="true" />
-              Discuss a Similar Build
+              <ExternalLink className="mr-2 h-4 w-4" aria-hidden="true" />
+              Discuss a similar build
             </Button>
           </div>
         </div>

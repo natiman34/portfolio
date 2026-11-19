@@ -1,247 +1,190 @@
 import {
   ArrowRight,
+  ArrowUpRight,
   Download,
   Github,
-  Globe,
-  Laptop,
-  Layers,
   Linkedin,
   Mail,
-  Moon,
-  ShieldCheck,
-  Sun,
-  Terminal,
+  MapPin,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PROFILE } from '@/data/portfolioData';
-import type { ThemePreference } from '@/utils/portfolio';
 import profileImage from '@/assets/natnael-profile-real.jpg';
 
 interface HeroProps {
-  themePreference: ThemePreference;
-  onChangeTheme: (pref: ThemePreference) => void;
   onHireClick: () => void;
   onViewProjectsClick: () => void;
 }
 
-const THEME_OPTIONS: { value: ThemePreference; label: string; icon: typeof Sun }[] = [
-  { value: 'dark', label: 'Dark', icon: Moon },
-  { value: 'light', label: 'Light', icon: Sun },
-  { value: 'system', label: 'System', icon: Laptop },
-];
-
-const Hero = ({
-  themePreference,
-  onChangeTheme,
-  onHireClick,
-  onViewProjectsClick,
-}: HeroProps) => {
+const Hero = ({ onHireClick, onViewProjectsClick }: HeroProps) => {
   return (
-    <section
-      id="home"
-      className="relative pt-24 pb-16 lg:pt-28 lg:pb-24 overflow-hidden border-b border-border"
-    >
+    <section id="home" className="relative overflow-hidden pt-20">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 subtle-grid-bg opacity-30"
+        className="pointer-events-none absolute inset-0 subtle-grid-bg grid-fade opacity-40"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 right-0 w-[460px] h-[460px] rounded-full bg-primary/10 blur-3xl"
+        className="pointer-events-none absolute -top-40 right-0 h-[520px] w-[520px] rounded-full bg-primary/10 blur-3xl"
       />
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Utility Row: Availability + 3-Mode Theme Selector */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-6 mb-8 border-b border-border/70">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
-            <span className="inline-flex items-center gap-2 font-medium text-foreground">
-              <Globe className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
-              {PROFILE.availability}
-            </span>
-            <span aria-hidden="true" className="hidden sm:inline">·</span>
-            <span className="text-xs sm:text-sm text-muted-foreground">
-              {PROFILE.location}
-            </span>
-          </div>
-
-          <div
-            role="group"
-            aria-label="Color theme preference"
-            className="inline-flex items-center gap-1 p-1 rounded-lg border border-border bg-card"
-          >
-            {THEME_OPTIONS.map((option) => {
-              const Icon = option.icon;
-              const isSelected = themePreference === option.value;
-              return (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => onChangeTheme(option.value)}
-                  aria-pressed={isSelected}
-                  aria-label={`Use ${option.label.toLowerCase()} theme`}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                    isSelected
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>{option.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Split Hero */}
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
-          {/* Left Column: Primary Typography & Actions */}
-          <div className="lg:col-span-7 flex flex-col justify-center min-w-0">
-            <p className="text-sm font-medium text-primary mb-3">
-              {PROFILE.roleTitle}
+      <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 sm:pt-14 lg:pb-24 lg:pt-16">
+        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-14">
+          <div className="min-w-0 lg:col-span-7">
+            <p className="meta-row">
+              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-[10px] tracking-[0.12em] text-foreground">
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--success))]"
+                />
+                {PROFILE.availability}
+              </span>
+              <span className="hidden items-center gap-1.5 sm:inline-flex">
+                <MapPin className="h-3 w-3" aria-hidden="true" />
+                {PROFILE.location}
+              </span>
             </p>
 
-            <h1 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-bold text-foreground leading-[1.1] tracking-tight mb-4">
-              {PROFILE.name}
-            </h1>
+            <p className="mt-7 font-mono text-[11px] uppercase tracking-[0.2em] text-primary">
+              IT Support Specialist · Full-Stack Developer
+            </p>
 
-            <p className="text-lg sm:text-2xl font-display font-semibold text-foreground/90 mb-5">
+            <h1 className="heading-xl mt-4">{PROFILE.name}</h1>
+
+            <p className="mt-6 max-w-xl font-display text-xl font-medium leading-snug tracking-tight text-foreground sm:text-2xl">
               {PROFILE.headline}
             </p>
 
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl mb-8">
-              {PROFILE.heroIntro}
-            </p>
+            <p className="lede mt-4 max-w-xl">{PROFILE.heroIntro}</p>
 
-            {/* Primary & Secondary CTAs + CV Download */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-8">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button
                 type="button"
                 size="lg"
                 onClick={onViewProjectsClick}
-                className="hero-primary-btn h-11 px-5 sm:px-6 font-medium whitespace-nowrap shrink-0"
+                className="h-11 rounded-lg px-5 text-sm font-medium"
               >
-                View Projects
+                View projects
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
               </Button>
 
               <Button
-                type="button"
+                asChild
                 variant="outline"
                 size="lg"
-                onClick={onHireClick}
-                className="h-11 px-5 sm:px-6 border-border bg-card hover:bg-secondary text-foreground font-medium whitespace-nowrap shrink-0"
+                className="h-11 rounded-lg border-border bg-card px-5 text-sm font-medium"
               >
-                Contact Me
+                <a
+                  href={PROFILE.cvUrl}
+                  download="Natnael_Sema_CV.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Download className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Download CV
+                </a>
               </Button>
 
-              <a
-                href={PROFILE.cvUrl}
-                download="Natnael_Sema_CV.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-2 min-h-[44px] text-sm font-medium text-muted-foreground hover:text-primary transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+              <button
+                type="button"
+                onClick={onHireClick}
+                className="link-inline h-11 px-1 text-sm"
               >
-                <Download className="h-4 w-4" aria-hidden="true" />
-                <span>Download CV</span>
-              </a>
+                Contact me
+                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+              </button>
             </div>
 
-            {/* Direct Profile Links */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2">
+            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-border pt-5">
               <a
                 href={PROFILE.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Natnael Sema on GitHub"
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="group inline-flex items-center gap-2 rounded-sm py-1 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <Github className="h-4 w-4" aria-hidden="true" />
-                <span>GitHub</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.12em]">
+                  GitHub
+                </span>
+                <ArrowUpRight
+                  className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100"
+                  aria-hidden="true"
+                />
               </a>
-              <span aria-hidden="true" className="text-border">/</span>
               <a
                 href={PROFILE.linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Natnael Sema on LinkedIn"
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="group inline-flex items-center gap-2 rounded-sm py-1 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <Linkedin className="h-4 w-4" aria-hidden="true" />
-                <span>LinkedIn</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.12em]">
+                  LinkedIn
+                </span>
+                <ArrowUpRight
+                  className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100"
+                  aria-hidden="true"
+                />
               </a>
-              <span aria-hidden="true" className="text-border">/</span>
               <a
                 href={`mailto:${PROFILE.email}`}
                 aria-label="Email Natnael Sema"
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="group inline-flex items-center gap-2 rounded-sm py-1 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <Mail className="h-4 w-4" aria-hidden="true" />
-                <span>Email</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.12em]">
+                  Email
+                </span>
               </a>
             </div>
           </div>
 
-          {/* Right Column: Developer Workspace & Portrait Visual */}
-          <div className="lg:col-span-5 flex flex-col min-w-0">
-            <div className="surface-card p-4 sm:p-6 h-full flex flex-col justify-between gap-6 relative overflow-hidden min-w-0">
-              <div className="flex items-center gap-3.5 sm:gap-4 pb-5 border-b border-border min-w-0">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-border bg-secondary shrink-0">
+          <div className="min-w-0 lg:col-span-5">
+            <div className="relative mx-auto w-full max-w-[400px] lg:ml-auto">
+              <div
+                aria-hidden="true"
+                className="absolute -bottom-3 -right-3 top-3 left-3 rounded-xl border border-border/70"
+              />
+              <figure className="panel relative overflow-hidden">
+                <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    Portrait / 01
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    {PROFILE.location.split(',')[0]}
+                  </span>
+                </div>
+
+                <div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary">
                   <img
                     src={profileImage}
                     alt="Portrait of Natnael Sema"
-                    width={80}
-                    height={80}
+                    width={640}
+                    height={800}
+                    fetchPriority="high"
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover object-center saturate-[0.92]"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/45 via-transparent to-transparent"
                   />
                 </div>
-                <div className="min-w-0">
-                  <h2 className="font-display text-lg font-semibold text-foreground truncate">
-                    Natnael Sema
-                  </h2>
-                  <p className="text-sm text-muted-foreground">
-                    BSc Computer Science · Addis Ababa
-                  </p>
-                  <p className="text-xs text-primary font-medium mt-1">
-                    Full-Stack Web &amp; IT Support
-                  </p>
-                </div>
-              </div>
 
-              <div className="rounded-lg border border-border bg-background/80 p-3.5 sm:p-4 font-mono text-xs leading-relaxed overflow-x-auto min-w-0 max-w-full">
-                <div className="flex items-center justify-between gap-2 text-muted-foreground pb-2.5 mb-3 border-b border-border">
-                  <span className="truncate">workspace / profile.ts</span>
-                  <span className="shrink-0">TypeScript</span>
-                </div>
-                <pre className="text-foreground/90 whitespace-pre-wrap sm:whitespace-pre break-words">
-                  <code>
-                    <span className="text-primary">const</span> profile = {'{\n'}
-                    {'  '}development: [<span className="text-accent-vivid">&quot;React&quot;</span>, <span className="text-accent-vivid">&quot;Node.js&quot;</span>],{'\n'}
-                    {'  '}operations: [<span className="text-accent-vivid">&quot;Windows 11&quot;</span>, <span className="text-accent-vivid">&quot;LAN/Wi-Fi&quot;</span>],{'\n'}
-                    {'  '}focus: <span className="text-accent-vivid">&quot;Practical Web Apps &amp; IT Reliability&quot;</span>{'\n'}
-                    {'}'};
-                  </code>
-                </pre>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-1">
-                <div className="p-2 sm:p-3 rounded-lg bg-secondary/50 border border-border/70 min-w-0">
-                  <Layers className="h-4 w-4 text-primary mb-1.5" aria-hidden="true" />
-                  <p className="text-xs font-medium text-foreground">Frontend</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Responsive UI</p>
-                </div>
-                <div className="p-2 sm:p-3 rounded-lg bg-secondary/50 border border-border/70 min-w-0">
-                  <Terminal className="h-4 w-4 text-primary mb-1.5" aria-hidden="true" />
-                  <p className="text-xs font-medium text-foreground">Full-Stack</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Web app logic</p>
-                </div>
-                <div className="p-2 sm:p-3 rounded-lg bg-secondary/50 border border-border/70 min-w-0">
-                  <ShieldCheck className="h-4 w-4 text-primary mb-1.5" aria-hidden="true" />
-                  <p className="text-xs font-medium text-foreground">IT Systems</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Support &amp; net</p>
-                </div>
-              </div>
+                <figcaption className="border-t border-border px-4 py-3.5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    Currently
+                  </p>
+                  <p className="mt-1.5 text-sm font-medium text-foreground">
+                    IT Support Technician · SNV
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    BSc Computer Science, Addis Ababa University · 2025
+                  </p>
+                </figcaption>
+              </figure>
             </div>
           </div>
         </div>
