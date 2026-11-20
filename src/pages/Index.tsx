@@ -78,15 +78,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary focus:text-primary-foreground focus:text-sm focus:font-medium"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
       >
         Skip to main content
       </a>
 
       <Navigation
+        themePreference={themePreference}
+        onChangeTheme={setThemePreference}
         onHireClick={() =>
           scrollToContactWithSubject('Freelance Web Development / IT Role Inquiry')
         }
@@ -94,8 +96,6 @@ const Index = () => {
 
       <main id="main-content" className="flex-1">
         <Hero
-          themePreference={themePreference}
-          onChangeTheme={setThemePreference}
           onViewProjectsClick={scrollToProjects}
           onHireClick={() =>
             scrollToContactWithSubject('Freelance Web Development / IT Role Inquiry')

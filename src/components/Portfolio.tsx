@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { ArrowUpRight, Check, FolderGit2, Github } from 'lucide-react';
+import { lazy, Suspense, useState } from 'react';
+import { ArrowUpRight, Check, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  FUTURE_PROJECT_TYPES,
-  PROJECTS,
-  PROJECT_CATEGORIES,
-} from '@/data/portfolioData';
+import FilterTabs from '@/components/FilterTabs';
+import Reveal from '@/components/Reveal';
+import SectionHeading from '@/components/SectionHeading';
+import { FUTURE_PROJECT_TYPES, PROJECTS, PROJECT_CATEGORIES } from '@/data/portfolioData';
 import { filterProjectsByCategory, type ProjectItem } from '@/utils/portfolio';
 import ProjectVisual from './ProjectVisual';
-import ProjectModal from './ProjectModal';
+
+const ProjectModal = lazy(() => import('./ProjectModal'));
 
 interface PortfolioProps {
   onInquireProject: (projectTitle: string) => void;
@@ -21,169 +21,184 @@ const Portfolio = ({ onInquireProject }: PortfolioProps) => {
   const visibleProjects = filterProjectsByCategory(PROJECTS, selectedCategory);
 
   return (
-    <section id="projects" className="py-20 lg:py-24 border-b border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-          <div className="max-w-2xl">
-            <p className="text-sm font-medium text-primary mb-2">Featured Projects</p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-3">
-              Practical applications built for clarity and reliability
-            </h2>
-            <p className="text-base text-muted-foreground">
-              Explore real projects across classroom management, daily productivity, and full-stack web application development.
-            </p>
-          </div>
+    <section id="projects" className="border-t border-border py-20 sm:py-24 lg:py-28">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <SectionHeading
+          index="03"
+          eyebrow="Selected Work"
+          title="Applications built around real, specific problems"
+          description="Each project solved a concrete workflow problem — from large-classroom attendance to focused daily planning and collaborative full-stack delivery."
+        >
+          <FilterTabs
+            label="Filter projects by category"
+            options={PROJECT_CATEGORIES}
+            value={selectedCategory}
+            onChange={setSelectedCategory}
+          />
+        </SectionHeading>
 
-          <div
-            role="group"
-            aria-label="Filter projects by category"
-            className="flex flex-wrap items-center gap-1.5 p-1 rounded-lg bg-secondary/70 border border-border self-start lg:self-auto"
-          >
-            {PROJECT_CATEGORIES.map((category) => {
-              const isSelected = selectedCategory === category;
-              return (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setSelectedCategory(category)}
-                  aria-pressed={isSelected}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap shrink-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                    isSelected
-                      ? 'bg-card text-foreground shadow-sm border border-border'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  {category}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <div className="mt-12 space-y-6">
+          {visibleProjects.map((project, index) => {
+            const isReversed = index % 2 === 1;
+            const projectNumber =
+              PROJECTS.findIndex((item) => item.id === project.id) + 1;
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {visibleProjects.map((project) => (
-            <article
-              key={project.id}
-              className="surface-card-interactive overflow-hidden flex flex-col justify-between"
-            >
-              <div>
-                <div className="aspect-[16/10] w-full overflow-hidden">
-                  <ProjectVisual slug={project.slug} />
-                </div>
-
-                <div className="p-6">
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-2">
-                    <span className="font-medium text-primary">{project.category}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{project.role}</span>
-                  </div>
-
-                  <h3 className="font-display text-xl font-semibold text-foreground mb-2.5">
-                    {project.title}
-                  </h3>
-
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                    {project.description}
-                  </p>
-
-                  <div className="mb-4 p-3 rounded-lg bg-secondary/40 border border-border/70">
-                    <p className="text-[11px] font-medium text-foreground mb-1">
-                      Problem Solved
-                    </p>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      {project.problemSolved}
-                    </p>
-                  </div>
-
-                  <ul className="space-y-1.5 mb-5">
-                    {project.features.slice(0, 3).map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-start gap-2 text-xs text-foreground/85"
-                      >
-                        <Check
-                          className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5"
-                          aria-hidden="true"
-                        />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <p className="text-xs font-mono text-muted-foreground pt-3 border-t border-border">
-                    {project.technologies.join(' · ')}
-                  </p>
-                </div>
-              </div>
-
-              <div className="px-6 pb-6 pt-2 flex flex-wrap items-center gap-3">
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={() => setActiveProject(project)}
-                  className="hero-primary-btn h-9 px-4 text-xs font-medium whitespace-nowrap shrink-0"
-                >
-                  View Project
-                  <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" aria-hidden="true" />
-                </Button>
-
-                {project.sourceUrl && (
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="h-9 px-3.5 text-xs border-border bg-background/50 whitespace-nowrap shrink-0"
-                  >
-                    <a
-                      href={project.sourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+            return (
+              <Reveal key={project.id} delay={index * 60}>
+                <article className="panel group overflow-hidden transition-colors hover:border-foreground/20">
+                  <div className="grid lg:grid-cols-12">
+                    <div
+                      className={`relative border-b border-border lg:col-span-5 lg:border-b-0 ${
+                        isReversed
+                          ? 'lg:order-2 lg:border-l'
+                          : 'lg:border-r'
+                      }`}
                     >
-                      <Github className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
-                      View Source
-                    </a>
-                  </Button>
-                )}
-              </div>
-            </article>
-          ))}
+                      <div className="h-full min-h-[220px]">
+                        <ProjectVisual slug={project.slug} />
+                      </div>
+                    </div>
+
+                    <div
+                      className={`flex min-w-0 flex-col p-6 sm:p-8 lg:col-span-7 ${
+                        isReversed ? 'lg:order-1' : ''
+                      }`}
+                    >
+                      <p className="meta-row">
+                        <span className="text-primary">
+                          {String(projectNumber).padStart(2, '0')}
+                        </span>
+                        <span aria-hidden="true">/</span>
+                        <span>{project.category}</span>
+                        <span aria-hidden="true">/</span>
+                        <span>{project.role}</span>
+                      </p>
+
+                      <h3 className="heading-sub mt-3">{project.title}</h3>
+                      <p className="mt-1.5 text-sm text-muted-foreground">
+                        {project.subtitle}
+                      </p>
+
+                      <p className="mt-5 text-sm leading-relaxed text-foreground/85">
+                        {project.description}
+                      </p>
+
+                      <ul className="mt-5 space-y-2">
+                        {project.features.slice(0, 3).map((feature) => (
+                          <li
+                            key={feature}
+                            className="flex items-start gap-2.5 text-sm text-muted-foreground"
+                          >
+                            <Check
+                              className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary"
+                              aria-hidden="true"
+                            />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <ul className="mt-6 flex flex-wrap gap-1.5" aria-label="Technologies used">
+                        {project.technologies.map((technology) => (
+                          <li key={technology} className="tag">
+                            {technology}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-border pt-5">
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => setActiveProject(project)}
+                          className="h-9 rounded-lg px-4 text-xs font-medium"
+                        >
+                          View case study
+                          <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" aria-hidden="true" />
+                        </Button>
+
+                        {project.sourceUrl ? (
+                          <Button
+                            asChild
+                            variant="ghost"
+                            size="sm"
+                            className="h-9 rounded-lg px-3 text-xs font-medium text-muted-foreground hover:text-foreground"
+                          >
+                            <a
+                              href={project.sourceUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Github className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+                              Repository
+                            </a>
+                          </Button>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
 
-        <div className="mt-10 surface-card p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <FolderGit2 className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
-            <div>
-              <h3 className="font-display text-base font-semibold text-foreground">
-                Available for Custom Builds &amp; Future Projects
+        {visibleProjects.length === 0 ? (
+          <div className="mt-12 rounded-xl border border-dashed border-border p-10 text-center">
+            <p className="text-sm text-muted-foreground">
+              No projects in this category yet.
+            </p>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setSelectedCategory('All')}
+              className="mt-3"
+            >
+              Show all projects
+            </Button>
+          </div>
+        ) : null}
+
+        <Reveal className="mt-8">
+          <div className="panel flex flex-col justify-between gap-5 p-6 sm:flex-row sm:items-center sm:p-8">
+            <div className="max-w-xl">
+              <p className="eyebrow">Available for custom work</p>
+              <h3 className="mt-2 text-base font-medium text-foreground">
+                Need something similar built? I take on focused web and internal-tool
+                projects.
               </h3>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="mt-1.5 text-sm text-muted-foreground">
                 {FUTURE_PROJECT_TYPES.join(' · ')}
               </p>
             </div>
-          </div>
 
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => onInquireProject('New Web Application Project')}
-            className="h-9 px-4 text-xs font-medium whitespace-nowrap shrink-0 self-start md:self-auto"
-          >
-            Start a Project
-          </Button>
-        </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => onInquireProject('New Web Application Project')}
+              className="h-9 shrink-0 self-start rounded-lg px-4 text-xs font-medium sm:self-auto"
+            >
+              Start a project
+              <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" aria-hidden="true" />
+            </Button>
+          </div>
+        </Reveal>
       </div>
 
-      {activeProject !== null && (
-        <ProjectModal
-          project={activeProject}
-          open={activeProject !== null}
-          onOpenChange={(open) => {
-            if (!open) setActiveProject(null);
-          }}
-          onInquireProject={onInquireProject}
-        />
-      )}
+      <Suspense fallback={null}>
+        {activeProject !== null ? (
+          <ProjectModal
+            project={activeProject}
+            open={activeProject !== null}
+            onOpenChange={(open) => {
+              if (!open) setActiveProject(null);
+            }}
+            onInquireProject={onInquireProject}
+          />
+        ) : null}
+      </Suspense>
     </section>
   );
 };

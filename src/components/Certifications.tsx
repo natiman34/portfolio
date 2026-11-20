@@ -1,87 +1,79 @@
 import { useState } from 'react';
-import { Award } from 'lucide-react';
+import FilterTabs from '@/components/FilterTabs';
+import Reveal from '@/components/Reveal';
+import SectionHeading from '@/components/SectionHeading';
 import { CERTIFICATIONS } from '@/data/portfolioData';
 import { filterCertificationsByTrack } from '@/utils/portfolio';
 
-const CERT_TRACKS = ['All', 'Development & Security', 'IT & Systems'] as const;
+const CERT_TRACKS = ['All', 'IT & Systems', 'Development & Security'] as const;
 
 const Certifications = () => {
   const [selectedTrack, setSelectedTrack] = useState<string>('All');
   const visibleCerts = filterCertificationsByTrack(CERTIFICATIONS, selectedTrack);
 
   return (
-    <section id="certifications" className="py-20 lg:py-24 border-b border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-          <div className="max-w-2xl">
-            <p className="text-sm font-medium text-primary mb-2">
-              Certifications &amp; Training
+    <section id="certifications" className="border-t border-border py-20 sm:py-24 lg:py-28">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <SectionHeading
+          index="05"
+          eyebrow="Credentials"
+          title="Continuous training across support, systems and security"
+          description="Completed certifications and coursework covering IT help desk practice, Windows troubleshooting, networking fundamentals and front-end engineering."
+        >
+          <FilterTabs
+            label="Filter certifications by track"
+            options={CERT_TRACKS}
+            value={selectedTrack}
+            onChange={setSelectedTrack}
+          />
+        </SectionHeading>
+
+        <Reveal className="mt-12">
+          <div className="flex items-center justify-between border-b border-border pb-3">
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              Credential log
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-3">
-              Verified training in development, security, and IT systems
-            </h2>
-            <p className="text-base text-muted-foreground">
-              Completed coursework and technical certifications across frontend &amp; backend fundamentals, cybersecurity essentials, and practical IT support.
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              {String(visibleCerts.length).padStart(2, '0')} entries
             </p>
           </div>
 
-          <div
-            role="group"
-            aria-label="Filter certifications by track"
-            className="flex flex-wrap items-center gap-1.5 p-1 rounded-lg bg-secondary/70 border border-border self-start lg:self-auto"
-          >
-            {CERT_TRACKS.map((track) => {
-              const isSelected = selectedTrack === track;
-              return (
-                <button
-                  key={track}
-                  type="button"
-                  onClick={() => setSelectedTrack(track)}
-                  aria-pressed={isSelected}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap shrink-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                    isSelected
-                      ? 'bg-card text-foreground shadow-sm border border-border'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  {track}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          {visibleCerts.map((cert) => (
-            <article
-              key={cert.id}
-              className="surface-card p-4 sm:p-5 flex flex-col sm:flex-row sm:items-start justify-between gap-2.5 sm:gap-4 min-w-0"
-            >
-              <div className="flex items-start gap-3.5 min-w-0">
-                <div className="h-9 w-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                  <Award className="h-4 w-4 text-primary" aria-hidden="true" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-display text-base font-semibold text-foreground leading-snug break-words">
-                    {cert.title}
+          <ul className="grid gap-x-12 md:grid-cols-2">
+            {visibleCerts.map((certification) => (
+              <li
+                key={certification.id}
+                className="flex flex-col gap-1.5 border-b border-border/70 py-4"
+              >
+                <div className="flex items-baseline justify-between gap-4">
+                  <h3 className="text-sm font-medium leading-snug text-foreground">
+                    {certification.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    <span>{cert.issuer}</span>
-                    <span aria-hidden="true"> · </span>
-                    <span className="text-primary">{cert.track}</span>
-                  </p>
-                  <p className="text-xs font-mono text-muted-foreground mt-1.5 break-words">
-                    {cert.skills.join(' · ')}
-                  </p>
+                  <span className="shrink-0 font-mono text-[10px] tabular-nums text-muted-foreground">
+                    {certification.date}
+                  </span>
                 </div>
-              </div>
 
-              <span className="text-xs font-mono text-muted-foreground whitespace-nowrap shrink-0 tabular-nums pl-12 sm:pl-0 pt-0.5">
-                {cert.date}
-              </span>
-            </article>
-          ))}
-        </div>
+                <p className="text-xs text-muted-foreground">
+                  {certification.issuer}
+                  <span aria-hidden="true" className="px-1.5 text-border">
+                    /
+                  </span>
+                  {certification.track}
+                </p>
+
+                <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground/80">
+                  {certification.skills.join(' · ')}
+                </p>
+              </li>
+            ))}
+          </ul>
+
+          {visibleCerts.length === 0 ? (
+            <p className="py-10 text-sm text-muted-foreground">
+              No credentials in this track yet.
+            </p>
+          ) : null}
+        </Reveal>
       </div>
     </section>
   );

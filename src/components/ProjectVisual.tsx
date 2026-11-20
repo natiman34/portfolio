@@ -7,7 +7,7 @@ interface ProjectVisualProps {
 const ProjectVisual = ({ slug }: ProjectVisualProps) => {
   if (slug === 'amn') {
     return (
-      <div className="w-full h-full bg-background/90 border-b border-border p-4 flex flex-col justify-between select-none">
+      <div className="w-full h-full bg-background/90 p-4 flex flex-col justify-between select-none">
         <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pb-2 border-b border-border">
           <span className="flex items-center gap-1.5 text-foreground font-medium">
             <Users className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
@@ -53,7 +53,7 @@ const ProjectVisual = ({ slug }: ProjectVisualProps) => {
 
   if (slug === 'plandroid') {
     return (
-      <div className="w-full h-full bg-background/90 border-b border-border p-4 flex flex-col justify-between select-none">
+      <div className="w-full h-full bg-background/90 p-4 flex flex-col justify-between select-none">
         <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pb-2 border-b border-border">
           <span className="flex items-center gap-1.5 text-foreground font-medium">
             <Clock className="h-3.5 w-3.5 text-accent-vivid" aria-hidden="true" />
@@ -73,11 +73,11 @@ const ProjectVisual = ({ slug }: ProjectVisualProps) => {
           <div className="col-span-3 space-y-1.5">
             <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md bg-card border border-border text-[11px]">
               <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" aria-hidden="true" />
-              <span className="text-foreground truncate">Review API architecture</span>
+              <span className="text-foreground leading-snug">Review API architecture</span>
             </div>
             <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md bg-card border border-border text-[11px]">
               <CheckCircle2 className="h-3.5 w-3.5 text-muted-foreground shrink-0" aria-hidden="true" />
-              <span className="text-muted-foreground truncate">Build responsive UI layout</span>
+              <span className="text-muted-foreground leading-snug">Build responsive UI layout</span>
             </div>
           </div>
         </div>
@@ -91,7 +91,7 @@ const ProjectVisual = ({ slug }: ProjectVisualProps) => {
   }
 
   return (
-    <div className="w-full h-full bg-background/90 border-b border-border p-4 flex flex-col justify-between select-none">
+    <div className="w-full h-full bg-background/90 p-4 flex flex-col justify-between select-none">
       <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pb-2 border-b border-border">
         <span className="flex items-center gap-1.5 text-foreground font-medium">
           <LayoutGrid className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
